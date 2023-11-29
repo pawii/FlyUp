@@ -1,0 +1,2 @@
+-Create PathfindingEditorModule in order to use Component Visualizer https://unrealcommunity.wiki/creating-an-editor-module-x64nt5g3
+-Use Component Visualizer in order to draw debug gizmos for pathfinding grid https://unrealcommunity.wiki/component-visualizers-xaa1qsng
