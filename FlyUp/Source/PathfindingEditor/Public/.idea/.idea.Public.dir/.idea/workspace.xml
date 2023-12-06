@@ -1,20 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="45f89860-7baa-47ef-9642-7d0bca88445b" name="Changes" comment="" />
+    <list default="true" id="45f89860-7baa-47ef-9642-7d0bca88445b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../Content/Game/Pathfinding/BP_PathfindingGrid.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Content/__ExternalObjects__/ThirdPerson/Maps/ThirdPersonMap/E/EO/ISIGIDLS6LJ0FIGVKQPT1M.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Pathfinding/Private/PathfindingGrid.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Pathfinding/Public/PathfindingGrid.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PathfindingEditor.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../PathfindingEditor.Build.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Public.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Public.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PathfindingEditorModule.cpp" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://E:/ProjectsUE/FlyUp/FlyUp/Source/FlyUp.Target.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../FlyUp.Target.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
+  <component name="ProjectId" id="2ZBDyWLUQ5PwOGzRsauVBcPQuKm" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\pdubovik\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\pdubovik\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\pdubovik\\AppData\\Local\\Symbols\\src&quot;
+    ]
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="45f89860-7baa-47ef-9642-7d0bca88445b" name="Changes" comment="" />
+      <created>1701886834106</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1701886834106</updated>
+      <workItem from="1701886836810" duration="83000" />
+      <workItem from="1701886968054" duration="371000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
 </project>
