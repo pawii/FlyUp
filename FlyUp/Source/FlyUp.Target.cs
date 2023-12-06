@@ -10,7 +10,12 @@ public class FlyUpTarget : TargetRules
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
+        
 		ExtraModuleNames.Add("FlyUp");
         ExtraModuleNames.Add("Pathfinding");
+        if (Type == TargetType.Editor)
+        {
+            ExtraModuleNames.Add("PathfindingEditor");
+        }
 	}
 }
