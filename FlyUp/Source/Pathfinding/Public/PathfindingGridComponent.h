@@ -13,16 +13,22 @@ class PATHFINDING_API UPathfindingGridComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UPathfindingGridComponent();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, Category="Grid")
+	FBox Bounds;
+	
+	UPROPERTY(EditAnywhere, Category="Grid")
+	FVector Point0;
+	
+	UPROPERTY(EditAnywhere, Category="Grid")
+	FVector Point1;
+	
+private:
+	UPROPERTY(EditAnywhere, Category="Grid")
+	float GridNodeSize;
+	
+	UFUNCTION(BlueprintCallable, CallInEditor)
+	void Bake();
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
 };
