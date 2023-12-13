@@ -17,17 +17,15 @@ void FPathfindingGridVisualizer::DrawVisualization(const UActorComponent* Compon
 	if (const UPathfindingGridComponent* TargetingComponent = Cast<UPathfindingGridComponent>(Component))
 	{
 		PDI->SetHitProxy(new HPathfindingGridProxy(Component, 0));
-		//PDI->DrawPoint(TargetingComponent->Bounds.Min, FLinearColor::Red, 1, SDPG_World);
-		const FLinearColor& Point0Color = (SelectedPointIndex == 0) ? FLinearColor::Green : FLinearColor::Red;
-		PDI->DrawPoint(TargetingComponent->Point0, Point0Color, 10, SDPG_World);
+		const FLinearColor& BoundsMinColor = (SelectedPointIndex == 0) ? FLinearColor::Green : FLinearColor::Red;
+		PDI->DrawPoint(TargetingComponent->Bounds.Min, BoundsMinColor, 10, SDPG_Foreground);
 		
 		PDI->SetHitProxy(new HPathfindingGridProxy(Component, 1));
-		//PDI->DrawPoint(TargetingComponent->Bounds.Max, FLinearColor::Red, 1, SDPG_World);
-		const FLinearColor& Point1Color = (SelectedPointIndex == 1) ? FLinearColor::Green : FLinearColor::Red;
-		PDI->DrawPoint(TargetingComponent->Point1, Point1Color, 10, SDPG_World);
-		PDI->SetHitProxy(nullptr);
+		const FLinearColor& BoundsMaxColor = (SelectedPointIndex == 1) ? FLinearColor::Green : FLinearColor::Red;
+		PDI->DrawPoint(TargetingComponent->Bounds.Max, BoundsMaxColor, 10, SDPG_Foreground);
 		
-		DrawWireBox(PDI, TargetingComponent->Bounds, FLinearColor::Red, SDPG_World);
+		PDI->SetHitProxy(nullptr);
+		DrawWireBox(PDI, TargetingComponent->Bounds, FLinearColor::White, SDPG_Foreground);
 	}
 }
 
@@ -64,11 +62,11 @@ bool FPathfindingGridVisualizer::GetWidgetLocation(const FEditorViewportClient* 
 	{
 		if (SelectedPointIndex == 0)
 		{
-			OutLocation = GetEditedGridComponent()->Point0;
+			OutLocation = GetEditedGridComponent()->Bounds.Min;
 		}
 		else
 		{
-			OutLocation = GetEditedGridComponent()->Point1;
+			OutLocation = GetEditedGridComponent()->Bounds.Max;
 		}
         
 		return true;
@@ -86,11 +84,11 @@ bool FPathfindingGridVisualizer::HandleInputDelta(FEditorViewportClient* Viewpor
 	{
 		if (SelectedPointIndex == 0)
 		{
-			GetEditedGridComponent()->Point0 += DeltaTranslate;
+			GetEditedGridComponent()->Bounds.Min += DeltaTranslate;
 		}
 		else
 		{
-			GetEditedGridComponent()->Point1 += DeltaTranslate;
+			GetEditedGridComponent()->Bounds.Max += DeltaTranslate;
 		}
 
 		bHandled = true;

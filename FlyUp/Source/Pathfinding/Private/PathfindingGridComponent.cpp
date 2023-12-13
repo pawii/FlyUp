@@ -1,6 +1,8 @@
 #include "PathfindingGridComponent.h"
 
-UPathfindingGridComponent::UPathfindingGridComponent(): GridNodeSize(0)
+UPathfindingGridComponent::UPathfindingGridComponent()
+: Bounds(FVector::One() * -1000, FVector::One() * 1000)
+, GridNodeSize(0)
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }

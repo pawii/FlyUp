@@ -1,2 +1,0 @@
--in tutorial https://unrealcommunity.wiki/component-visualizers-xaa1qsng there is no implementation of FTargetingComponentVisualizer::GetEditedTargetingComponent()
--FComponentVisualizer::GetEditedComponent returns nullptr. why?

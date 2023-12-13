@@ -18,12 +18,6 @@ public:
 	UPROPERTY(EditAnywhere, Category="Grid")
 	FBox Bounds;
 	
-	UPROPERTY(EditAnywhere, Category="Grid")
-	FVector Point0;
-	
-	UPROPERTY(EditAnywhere, Category="Grid")
-	FVector Point1;
-	
 private:
 	UPROPERTY(EditAnywhere, Category="Grid")
 	float GridNodeSize;
