@@ -44,6 +44,9 @@ bool FPathfindingGridVisualizer::VisProxyHandleClick(FEditorViewportClient* InVi
 		{
 			const HPathfindingGridProxy* Proxy = static_cast<HPathfindingGridProxy*>(VisProxy);
 			SelectedPointIndex = Proxy->PointIndex;
+			
+			const UPathfindingGridComponent* GridComponent = Cast<const UPathfindingGridComponent>(VisProxy->Component.Get());
+			GridComponentPropertyPath = FComponentPropertyPath(GridComponent);
 		}
 	}
 	else
@@ -57,15 +60,15 @@ bool FPathfindingGridVisualizer::VisProxyHandleClick(FEditorViewportClient* InVi
 bool FPathfindingGridVisualizer::GetWidgetLocation(const FEditorViewportClient* ViewportClient,
 	FVector& OutLocation) const
 {
-	if (GetEditedPathfindingGridComponent() && SelectedPointIndex != INDEX_NONE)
+	if (GetEditedGridComponent() && SelectedPointIndex != INDEX_NONE)
 	{
 		if (SelectedPointIndex == 0)
 		{
-			OutLocation = GetEditedPathfindingGridComponent()->Point0;
+			OutLocation = GetEditedGridComponent()->Point0;
 		}
 		else
 		{
-			OutLocation = GetEditedPathfindingGridComponent()->Point1;
+			OutLocation = GetEditedGridComponent()->Point1;
 		}
         
 		return true;
@@ -79,15 +82,15 @@ bool FPathfindingGridVisualizer::HandleInputDelta(FEditorViewportClient* Viewpor
 {
 	bool bHandled = false;
 
-	if (GetEditedPathfindingGridComponent() && SelectedPointIndex != INDEX_NONE)
+	if (GetEditedGridComponent() && SelectedPointIndex != INDEX_NONE)
 	{
 		if (SelectedPointIndex == 0)
 		{
-			GetEditedPathfindingGridComponent()->Point0 += DeltaTranslate;
+			GetEditedGridComponent()->Point0 += DeltaTranslate;
 		}
 		else
 		{
-			GetEditedPathfindingGridComponent()->Point1 += DeltaTranslate;
+			GetEditedGridComponent()->Point1 += DeltaTranslate;
 		}
 
 		bHandled = true;
@@ -96,7 +99,7 @@ bool FPathfindingGridVisualizer::HandleInputDelta(FEditorViewportClient* Viewpor
 	return bHandled;
 }
 
-UPathfindingGridComponent* FPathfindingGridVisualizer::GetEditedPathfindingGridComponent() const
+UPathfindingGridComponent* FPathfindingGridVisualizer::GetEditedGridComponent() const
 {
-	return static_cast<UPathfindingGridComponent*>(GetEditedComponent());
+	return Cast<UPathfindingGridComponent>(GridComponentPropertyPath.GetComponent());
 }

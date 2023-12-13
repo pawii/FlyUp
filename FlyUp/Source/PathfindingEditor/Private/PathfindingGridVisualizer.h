@@ -17,6 +17,7 @@ public:
 	
 private:
 	int SelectedPointIndex;
-	
-	UPathfindingGridComponent* GetEditedPathfindingGridComponent() const;
+	FComponentPropertyPath GridComponentPropertyPath;
+
+	UPathfindingGridComponent* GetEditedGridComponent() const;
 };
