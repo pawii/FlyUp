@@ -1,18 +1,27 @@
 #include "PathfindingGridComponent.h"
 
 UPathfindingGridComponent::UPathfindingGridComponent()
-: Bounds(FVector::One() * -1000, FVector::One() * 1000)
-, GridNodeSize(0)
 {
 	PrimaryComponentTick.bCanEverTick = true;
-
-	FNodeGrid Node;
-	Node.WorldPosition = FVector::ZeroVector;
-	Nodes.Add(Node);
 }
 
-void UPathfindingGridComponent::Bake()
+void UPathfindingGridComponent::BakeGrid()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Bake Pressed"));
+}
+
+void UPathfindingGridComponent::ResetGrid()
+{
+	Bounds = FBox(FVector::ZeroVector, FVector::OneVector * 1000);
+	GridNodeSize = 100;
+	
+	FNodeGrid Node1;
+	Node1.LocalPosition = FVector::ZeroVector;
+	FNodeGrid Node2;
+	Node2.LocalPosition = Node1.LocalPosition + FVector::OneVector * GridNodeSize;
+	Node2.bWalkable = false;
+	
+	Nodes.Add(Node1);
+	Nodes.Add(Node2);
 }
 

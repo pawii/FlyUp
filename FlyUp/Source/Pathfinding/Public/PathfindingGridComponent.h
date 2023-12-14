@@ -15,6 +15,9 @@ class PATHFINDING_API UPathfindingGridComponent : public UActorComponent
 
 public:	
 	UPROPERTY(EditAnywhere, Category="Grid")
+	float GridNodeSize;
+	
+	UPROPERTY(EditAnywhere, Category="Grid")
 	FBox Bounds;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Grid")
@@ -23,9 +26,9 @@ public:
 	UPathfindingGridComponent();
 	
 private:
-	UPROPERTY(EditAnywhere, Category="Grid")
-	float GridNodeSize;
-	
 	UFUNCTION(BlueprintCallable, CallInEditor)
-	void Bake();
+	void BakeGrid();
+
+	UFUNCTION(BlueprintCallable, CallInEditor)
+	void ResetGrid();
 };

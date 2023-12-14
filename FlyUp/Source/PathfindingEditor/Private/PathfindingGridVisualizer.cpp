@@ -26,6 +26,15 @@ void FPathfindingGridVisualizer::DrawVisualization(const UActorComponent* Compon
 		
 		PDI->SetHitProxy(nullptr);
 		DrawWireBox(PDI, TargetingComponent->Bounds, FLinearColor::White, SDPG_Foreground);
+		
+		for (const FNodeGrid Node: TargetingComponent->Nodes)
+		{
+			const FLinearColor& NodeColor = Node.bWalkable ? FColor::Green : FColor::Red;
+			const FBox& NodeBounds =
+				FBox(TargetingComponent->Bounds.Min + Node.LocalPosition,
+					TargetingComponent->Bounds.Min + Node.LocalPosition + FVector:: OneVector * TargetingComponent->GridNodeSize);
+			DrawWireBox(PDI, NodeBounds, NodeColor, SDPG_Foreground);
+		}
 	}
 }
 
