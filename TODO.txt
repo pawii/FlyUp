@@ -1,5 +1,5 @@
 read more about garbage collection:
 https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Objects/Optimizations/
 https://unrealcommunity.wiki/garbage-collection-36d1da
-https://unrealcommunity.wiki/garbage-collection-overview-95snds3x
++ https://unrealcommunity.wiki/garbage-collection-overview-95snds3x
 https://mikelis.net/memory-management-garbage-collection-in-unreal-engine/

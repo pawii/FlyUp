@@ -5,6 +5,10 @@ UPathfindingGridComponent::UPathfindingGridComponent()
 , GridNodeSize(0)
 {
 	PrimaryComponentTick.bCanEverTick = true;
+
+	FNodeGrid Node;
+	Node.WorldPosition = FVector::ZeroVector;
+	Nodes.Add(Node);
 }
 
 void UPathfindingGridComponent::Bake()
