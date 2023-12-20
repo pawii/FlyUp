@@ -10,7 +10,10 @@ struct FNodeGrid
 
 public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	FVector LocalPosition;
+	FVector WorldPosition;
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	float Size;
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	bool bWalkable;

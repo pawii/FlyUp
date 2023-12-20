@@ -29,11 +29,13 @@ void FPathfindingGridVisualizer::DrawVisualization(const UActorComponent* Compon
 		
 		for (const FNodeGrid Node: TargetingComponent->Nodes)
 		{
-			const FLinearColor& NodeColor = Node.bWalkable ? FColor::Green : FColor::Red;
-			const FBox& NodeBounds =
-				FBox(TargetingComponent->Bounds.Min + Node.LocalPosition,
-					TargetingComponent->Bounds.Min + Node.LocalPosition + FVector:: OneVector * TargetingComponent->GridNodeSize);
-			DrawWireBox(PDI, NodeBounds, NodeColor, SDPG_Foreground);
+			if (!Node.bWalkable)
+			{
+				const FBox& NodeBounds =
+					FBox(Node.WorldPosition,
+						Node.WorldPosition + FVector::OneVector * Node.Size);
+				DrawWireBox(PDI, NodeBounds, FColor::Red, SDPG_World);
+			}
 		}
 	}
 }
@@ -98,6 +100,11 @@ bool FPathfindingGridVisualizer::HandleInputDelta(FEditorViewportClient* Viewpor
 		else
 		{
 			GetEditedGridComponent()->Bounds.Max += DeltaTranslate;
+		}
+
+		if (DeltaTranslate != FVector::ZeroVector)
+		{
+			GetEditedGridComponent()->Modify();
 		}
 
 		bHandled = true;
