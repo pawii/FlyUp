@@ -18,11 +18,11 @@ void FPathfindingGridVisualizer::DrawVisualization(const UActorComponent* Compon
 	{
 		PDI->SetHitProxy(new HPathfindingGridProxy(Component, 0));
 		const FLinearColor& BoundsMinColor = (SelectedPointIndex == 0) ? FLinearColor::Green : FLinearColor::Red;
-		PDI->DrawPoint(TargetingComponent->Bounds.Min, BoundsMinColor, 10, SDPG_Foreground);
+		PDI->DrawPoint(TargetingComponent->GetBoundsMinWorldPosition(), BoundsMinColor, 10, SDPG_Foreground);
 		
 		PDI->SetHitProxy(new HPathfindingGridProxy(Component, 1));
 		const FLinearColor& BoundsMaxColor = (SelectedPointIndex == 1) ? FLinearColor::Green : FLinearColor::Red;
-		PDI->DrawPoint(TargetingComponent->Bounds.Max, BoundsMaxColor, 10, SDPG_Foreground);
+		PDI->DrawPoint(TargetingComponent->GetBoundsMaxWorldPosition(), BoundsMaxColor, 10, SDPG_Foreground);
 		
 		PDI->SetHitProxy(nullptr);
 		DrawWireBox(PDI, TargetingComponent->Bounds, FLinearColor::White, SDPG_Foreground);
@@ -91,20 +91,21 @@ bool FPathfindingGridVisualizer::HandleInputDelta(FEditorViewportClient* Viewpor
 {
 	bool bHandled = false;
 
-	if (GetEditedGridComponent() && SelectedPointIndex != INDEX_NONE)
+	UPathfindingGridComponent* GridComponent = GetEditedGridComponent();
+	if (GridComponent && SelectedPointIndex != INDEX_NONE)
 	{
 		if (SelectedPointIndex == 0)
 		{
-			GetEditedGridComponent()->Bounds.Min += DeltaTranslate;
+			GridComponent->Bounds.Min = GridComponent->GetBoundsMinWorldPosition() + DeltaTranslate;
 		}
 		else
 		{
-			GetEditedGridComponent()->Bounds.Max += DeltaTranslate;
+			GridComponent->Bounds.Max = GridComponent->GetBoundsMaxWorldPosition() + DeltaTranslate;
 		}
 
 		if (DeltaTranslate != FVector::ZeroVector)
 		{
-			GetEditedGridComponent()->Modify();
+			GridComponent->Modify();
 		}
 
 		bHandled = true;

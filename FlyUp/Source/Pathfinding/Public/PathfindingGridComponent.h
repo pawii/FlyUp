@@ -14,6 +14,8 @@ class PATHFINDING_API UPathfindingGridComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
+	UPathfindingGridComponent();
+	
 	UPROPERTY(EditAnywhere, Category="Grid")
 	float GridNodeSize;
 	
@@ -22,8 +24,15 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Grid")
 	TArray<FNodeGrid> Nodes;
-	
-	UPathfindingGridComponent();
+
+	UPROPERTY(EditAnywhere, Category="Grid")
+	AActor* StartPoint;
+
+	UPROPERTY(EditAnywhere, Category="Grid")
+	AActor* EndPoint;
+
+	FVector GetBoundsMinWorldPosition() const;
+	FVector GetBoundsMaxWorldPosition() const;
 	
 private:
 	UFUNCTION(BlueprintCallable, CallInEditor)
@@ -31,4 +40,7 @@ private:
 
 	UFUNCTION(BlueprintCallable, CallInEditor)
 	void ResetGrid();
+
+	UFUNCTION(BlueprintCallable, CallInEditor)
+	void CalculatePath();
 };

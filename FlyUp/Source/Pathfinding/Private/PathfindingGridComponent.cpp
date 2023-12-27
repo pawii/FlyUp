@@ -6,18 +6,30 @@ UPathfindingGridComponent::UPathfindingGridComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
+FVector UPathfindingGridComponent::GetBoundsMinWorldPosition() const
+{
+	return Bounds.Min + GetOwner()->GetActorLocation();
+}
+
+FVector UPathfindingGridComponent::GetBoundsMaxWorldPosition() const
+{
+	return Bounds.Max + GetOwner()->GetActorLocation();
+}
+
 void UPathfindingGridComponent::BakeGrid()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Bake Pressed"));
 
 	Nodes.Empty();
 	FVector NodeHalfSize = FVector::OneVector * GridNodeSize * 0.5f;
+	FVector BoundsMin = GetBoundsMinWorldPosition();
+	FVector BoundsMax = GetBoundsMaxWorldPosition();
 
-	for (float x = Bounds.Min.X; x < Bounds.Max.X; x+= GridNodeSize)
+	for (float x = BoundsMin.X; x < BoundsMax.X; x+= GridNodeSize)
 	{
-		for (float y = Bounds.Min.Y; y < Bounds.Max.Y; y += GridNodeSize)
+		for (float y = BoundsMin.Y; y < BoundsMax.Y; y += GridNodeSize)
 		{
-			for (float z = Bounds.Min.Z; z < Bounds.Max.Z; z += GridNodeSize)
+			for (float z = BoundsMin.Z; z < BoundsMax.Z; z += GridNodeSize)
 			{
 				TArray<AActor*> ActorsToIgnore;
 				FNodeGrid Node;
@@ -53,9 +65,13 @@ void UPathfindingGridComponent::BakeGrid()
 
 void UPathfindingGridComponent::ResetGrid()
 {
-	Bounds = FBox(FVector::ZeroVector, FVector::OneVector * 1000);
+	Bounds = FBox(GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + FVector::OneVector * 1000);
 	GridNodeSize = 100;
 	Nodes.Empty();
 	Modify();
 }
 
+void UPathfindingGridComponent::CalculatePath()
+{
+	
+}
