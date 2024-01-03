@@ -2,6 +2,7 @@
 #include "PathfindingGridComponent.h"
 #include "PathfindingGridHitProxies.h"
 #include "SceneManagement.h"
+#include "Animation/Rig.h"
 
 FPathfindingGridVisualizer::FPathfindingGridVisualizer()
 {
@@ -27,17 +28,29 @@ void FPathfindingGridVisualizer::DrawVisualization(const UActorComponent* Compon
 		PDI->SetHitProxy(nullptr);
 		DrawWireBox(PDI, TargetingComponent->Bounds, FLinearColor::White, SDPG_Foreground);
 		
-		for (const FNodeGrid Node: TargetingComponent->Nodes)
+		for (const FNodeGrid& Node: TargetingComponent->Nodes)
 		{
 			if (!Node.bWalkable)
 			{
-				const FBox& NodeBounds =
-					FBox(Node.WorldPosition,
-						Node.WorldPosition + FVector::OneVector * Node.Size);
-				DrawWireBox(PDI, NodeBounds, FColor::Red, SDPG_World);
+				DrawNode(PDI, Node, FColor::Red);
 			}
 		}
+
+		if (TargetingComponent->StartPoint)
+		{
+			FNodeGrid ClosestNode = TargetingComponent->FindClosestNode(TargetingComponent->StartPoint->GetActorLocation());
+			DrawNode(PDI, ClosestNode, FColor::Green);
+			DrawWireSphere(PDI, TargetingComponent->StartPoint->GetActorLocation(), FColor::Red, 10, 100, 0);
+		}
 	}
+}
+
+void FPathfindingGridVisualizer::DrawNode(FPrimitiveDrawInterface* PDI, const FNodeGrid& Node, const FLinearColor& Color) const
+{
+	const FBox& NodeBounds =
+		FBox(Node.WorldPosition,
+			Node.WorldPosition + FVector::OneVector * Node.Size);
+	DrawWireBox(PDI, NodeBounds, Color, SDPG_World);
 }
 
 bool FPathfindingGridVisualizer::VisProxyHandleClick(FEditorViewportClient* InViewportClient,

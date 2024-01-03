@@ -16,6 +16,36 @@ FVector UPathfindingGridComponent::GetBoundsMaxWorldPosition() const
 	return Bounds.Max + GetOwner()->GetActorLocation();
 }
 
+FNodeGrid UPathfindingGridComponent::FindClosestNode(FVector Location) const
+{
+	FVector BoundsMin = GetBoundsMinWorldPosition();
+	FVector BoundsMax = GetBoundsMaxWorldPosition();
+	
+	int CountNodesAlongX = ((BoundsMax.X - BoundsMin.X) / GridNodeSize) + 1;
+	int ClosestNodeIDAlongX = FindNodeIDAlongSpecificAxis(Location.X, BoundsMin.X, CountNodesAlongX);
+	
+	int CountNodesAlongY = ((BoundsMax.Y - BoundsMin.Y) / GridNodeSize) + 1;
+	int ClosestNodeIDAlongY = FindNodeIDAlongSpecificAxis(Location.Y, BoundsMin.Y, CountNodesAlongY);
+	
+	int CountNodesAlongZ = ((BoundsMax.Z - BoundsMin.Z) / GridNodeSize) + 1;
+	int ClosestNodeIDAlongZ = FindNodeIDAlongSpecificAxis(Location.Z, BoundsMin.Z, CountNodesAlongZ);
+
+	int NodeID = ClosestNodeIDAlongZ + ClosestNodeIDAlongY * CountNodesAlongZ + ClosestNodeIDAlongX * CountNodesAlongZ * CountNodesAlongY;
+	return Nodes[NodeID];
+}
+
+int UPathfindingGridComponent::FindNodeIDAlongSpecificAxis(const double& Position, const double& BoundsMin, int CountNodes) const
+{
+	for (int i = 0; i < CountNodes - 1; i++)
+	{
+		if (Position < BoundsMin + (i + 1) * GridNodeSize)
+		{
+			return i;
+		}
+	}
+	return CountNodes - 1;
+}
+
 void UPathfindingGridComponent::BakeGrid()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Bake Pressed"));
@@ -73,5 +103,4 @@ void UPathfindingGridComponent::ResetGrid()
 
 void UPathfindingGridComponent::CalculatePath()
 {
-	
 }

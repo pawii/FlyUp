@@ -33,6 +33,7 @@ public:
 
 	FVector GetBoundsMinWorldPosition() const;
 	FVector GetBoundsMaxWorldPosition() const;
+	FNodeGrid FindClosestNode(FVector Location) const;
 	
 private:
 	UFUNCTION(BlueprintCallable, CallInEditor)
@@ -43,4 +44,6 @@ private:
 
 	UFUNCTION(BlueprintCallable, CallInEditor)
 	void CalculatePath();
+	
+	int FindNodeIDAlongSpecificAxis(const double& Position, const double& BoundsMin, int CountNodes) const;
 };

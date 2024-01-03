@@ -4,11 +4,14 @@
 #include "NodeGrid.generated.h"
 
 USTRUCT(BlueprintType)
-struct FNodeGrid
+struct PATHFINDING_API FNodeGrid
 {
 	GENERATED_USTRUCT_BODY()
 
 public:
+	FNodeGrid();
+	~FNodeGrid();
+	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	FVector WorldPosition;
 	
@@ -17,4 +20,10 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	bool bWalkable;
+
+	int GCost;
+
+	int HCost;
+
+	int CalculateFCost() const;
 };
