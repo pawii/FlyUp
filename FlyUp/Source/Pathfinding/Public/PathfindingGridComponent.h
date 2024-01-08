@@ -34,6 +34,7 @@ public:
 	FVector GetBoundsMinWorldPosition() const;
 	FVector GetBoundsMaxWorldPosition() const;
 	FNodeGrid FindClosestNode(FVector Location) const;
+	void FindNeighbours(const FNodeGrid& Origin, TArray<FNodeGrid>& Neigbours) const;
 	
 private:
 	UFUNCTION(BlueprintCallable, CallInEditor)

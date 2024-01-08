@@ -34,6 +34,25 @@ FNodeGrid UPathfindingGridComponent::FindClosestNode(FVector Location) const
 	return Nodes[NodeID];
 }
 
+void UPathfindingGridComponent::FindNeighbours(const FNodeGrid& Origin, TArray<FNodeGrid>& Neigbours) const
+{
+	// FVector BoundsMin = GetBoundsMinWorldPosition();
+	// FVector BoundsMax = GetBoundsMaxWorldPosition();
+	//
+	// int CountNodesAlongX = ((BoundsMax.X - BoundsMin.X) / GridNodeSize) + 1;
+	// int CountNodesAlongY = ((BoundsMax.Y - BoundsMin.Y) / GridNodeSize) + 1;
+	// int CountNodesAlongZ = ((BoundsMax.Z - BoundsMin.Z) / GridNodeSize) + 1;
+	//
+	// int OriginId = Nodes.IndexOfByKey(Origin);
+	//
+	// bool bHasUpNode = OriginId % CountNodesAlongZ != 0;
+	// bool bHasDownNode = OriginId % CountNodesAlongZ != 1;
+	// int DownNodeId = OriginId - 1;
+	//
+	// Neigbours.Empty();
+	// Neigbours[0] = Nodes[0];
+}
+
 int UPathfindingGridComponent::FindNodeIDAlongSpecificAxis(const double& Position, const double& BoundsMin, int CountNodes) const
 {
 	for (int i = 0; i < CountNodes - 1; i++)
