@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GridArray.h"
 #include "NodeGrid.h"
 #include "Components/ActorComponent.h"
 #include "PathfindingGridComponent.generated.h"
@@ -18,12 +19,10 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category="Grid")
 	float GridNodeSize;
-	
-	UPROPERTY(EditAnywhere, Category="Grid")
-	FBox Bounds;
 
+	//TODO: make const
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Grid")
-	TArray<FNodeGrid> Nodes;
+	UGridArray* GridArray;
 
 	UPROPERTY(EditAnywhere, Category="Grid")
 	AActor* StartPoint;
@@ -31,12 +30,15 @@ public:
 	UPROPERTY(EditAnywhere, Category="Grid")
 	AActor* EndPoint;
 
-	FVector GetBoundsMinWorldPosition() const;
-	FVector GetBoundsMaxWorldPosition() const;
-	FNodeGrid FindClosestNode(FVector Location) const;
-	void FindNeighbours(const FNodeGrid& Origin, TArray<FNodeGrid>& Neigbours) const;
+	const FNodeGrid* FindClosestNode(FVector Location) const;
+	void FindNeighbours(const FNodeGrid& Origin, TArray<FNodeGrid>& Neighbours) const;
+	FBox GetBounds() const;
+	void SetBounds(FBox NewBounds);
 	
 private:
+	UPROPERTY(EditAnywhere, Category="Grid")
+	FBox Bounds;
+	
 	UFUNCTION(BlueprintCallable, CallInEditor)
 	void BakeGrid();
 
@@ -45,6 +47,4 @@ private:
 
 	UFUNCTION(BlueprintCallable, CallInEditor)
 	void CalculatePath();
-	
-	int FindNodeIDAlongSpecificAxis(const double& Position, const double& BoundsMin, int CountNodes) const;
 };

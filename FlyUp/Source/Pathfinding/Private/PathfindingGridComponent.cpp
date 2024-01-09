@@ -4,37 +4,57 @@
 UPathfindingGridComponent::UPathfindingGridComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+
+	if (!GridArray)
+	{
+		GridArray = NewObject<UGridArray>();
+		GridArray->Initialize(0, 0, 0);
+		UE_LOG(LogTemp, Warning, TEXT("Initialize GridArray"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GridArray already exists"));
+	}
 }
 
-FVector UPathfindingGridComponent::GetBoundsMinWorldPosition() const
+const FNodeGrid* UPathfindingGridComponent::FindClosestNode(FVector Location) const
 {
-	return Bounds.Min + GetOwner()->GetActorLocation();
+	if (!GridArray->Contains(0, 0, 0))
+	{
+		return nullptr;
+	}
+	
+	const FNodeGrid* StartGridNode = GridArray->Get(0, 0, 0);
+	int NodeX = GridArray->GetXSize();
+	int NodeY = GridArray->GetYSize();
+	int NodeZ = GridArray->GetZSize();
+
+	for (int i = 0; i < GridArray->GetXSize() - 1; i++)
+	{
+		if (Location.X < StartGridNode->WorldPosition.X + (i + 1) * GridNodeSize)
+		{
+			NodeX = i;
+		}
+	}
+	for (int i = 0; i < GridArray->GetYSize() - 1; i++)
+	{
+		if (Location.Y < StartGridNode->WorldPosition.Y + (i + 1) * GridNodeSize)
+		{
+			NodeY = i;
+		}
+	}
+	for (int i = 0; i < GridArray->GetZSize() - 1; i++)
+	{
+		if (Location.Z < StartGridNode->WorldPosition.Z + (i + 1) * GridNodeSize)
+		{
+			NodeZ = i;
+		}
+	}
+	
+	return GridArray->Get(NodeX, NodeY, NodeZ);
 }
 
-FVector UPathfindingGridComponent::GetBoundsMaxWorldPosition() const
-{
-	return Bounds.Max + GetOwner()->GetActorLocation();
-}
-
-FNodeGrid UPathfindingGridComponent::FindClosestNode(FVector Location) const
-{
-	FVector BoundsMin = GetBoundsMinWorldPosition();
-	FVector BoundsMax = GetBoundsMaxWorldPosition();
-	
-	int CountNodesAlongX = ((BoundsMax.X - BoundsMin.X) / GridNodeSize) + 1;
-	int ClosestNodeIDAlongX = FindNodeIDAlongSpecificAxis(Location.X, BoundsMin.X, CountNodesAlongX);
-	
-	int CountNodesAlongY = ((BoundsMax.Y - BoundsMin.Y) / GridNodeSize) + 1;
-	int ClosestNodeIDAlongY = FindNodeIDAlongSpecificAxis(Location.Y, BoundsMin.Y, CountNodesAlongY);
-	
-	int CountNodesAlongZ = ((BoundsMax.Z - BoundsMin.Z) / GridNodeSize) + 1;
-	int ClosestNodeIDAlongZ = FindNodeIDAlongSpecificAxis(Location.Z, BoundsMin.Z, CountNodesAlongZ);
-
-	int NodeID = ClosestNodeIDAlongZ + ClosestNodeIDAlongY * CountNodesAlongZ + ClosestNodeIDAlongX * CountNodesAlongZ * CountNodesAlongY;
-	return Nodes[NodeID];
-}
-
-void UPathfindingGridComponent::FindNeighbours(const FNodeGrid& Origin, TArray<FNodeGrid>& Neigbours) const
+void UPathfindingGridComponent::FindNeighbours(const FNodeGrid& Origin, TArray<FNodeGrid>& Neighbours) const
 {
 	// FVector BoundsMin = GetBoundsMinWorldPosition();
 	// FVector BoundsMax = GetBoundsMaxWorldPosition();
@@ -53,40 +73,43 @@ void UPathfindingGridComponent::FindNeighbours(const FNodeGrid& Origin, TArray<F
 	// Neigbours[0] = Nodes[0];
 }
 
-int UPathfindingGridComponent::FindNodeIDAlongSpecificAxis(const double& Position, const double& BoundsMin, int CountNodes) const
+FBox UPathfindingGridComponent::GetBounds() const
 {
-	for (int i = 0; i < CountNodes - 1; i++)
-	{
-		if (Position < BoundsMin + (i + 1) * GridNodeSize)
-		{
-			return i;
-		}
-	}
-	return CountNodes - 1;
+	return FBox(Bounds.Min + GetOwner()->GetActorLocation(), Bounds.Max + GetOwner()->GetActorLocation());
+}
+
+void UPathfindingGridComponent::SetBounds(FBox NewBounds)
+{
+	this->Bounds.Min = NewBounds.Min - GetOwner()->GetActorLocation();
+	this->Bounds.Max = NewBounds.Max - GetOwner()->GetActorLocation();
 }
 
 void UPathfindingGridComponent::BakeGrid()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Bake Pressed"));
 
-	Nodes.Empty();
 	FVector NodeHalfSize = FVector::OneVector * GridNodeSize * 0.5f;
-	FVector BoundsMin = GetBoundsMinWorldPosition();
-	FVector BoundsMax = GetBoundsMaxWorldPosition();
+	FVector BoundsMin = GetBounds().Min;
+	FVector BoundsMax = GetBounds().Max;
 
-	for (float x = BoundsMin.X; x < BoundsMax.X; x+= GridNodeSize)
+	int XSize = ((BoundsMax.X - BoundsMin.X) / GridNodeSize) + 1;
+	int YSize = ((BoundsMax.Y - BoundsMin.Y) / GridNodeSize) + 1;
+	int ZSize = ((BoundsMax.Z - BoundsMin.Z) / GridNodeSize) + 1;
+	GridArray->Initialize(XSize, YSize, ZSize);
+
+	for (int X = 0; X < XSize; X++)
 	{
-		for (float y = BoundsMin.Y; y < BoundsMax.Y; y += GridNodeSize)
+		for (int Y = 0; Y < YSize; Y++)
 		{
-			for (float z = BoundsMin.Z; z < BoundsMax.Z; z += GridNodeSize)
+			for (int Z = 0; Z < ZSize; Z++)
 			{
-				TArray<AActor*> ActorsToIgnore;
 				FNodeGrid Node;
-				Node.WorldPosition = FVector(x, y, z);
+				Node.WorldPosition = BoundsMin + FVector(X, Y, Z) * GridNodeSize;
 				Node.Size = GridNodeSize;
 				
 				FVector NodeCenter = Node.WorldPosition + FVector::One() * GridNodeSize * 0.5f;
 				FHitResult HitResult;
+				TArray<AActor*> ActorsToIgnore;
 				UKismetSystemLibrary::BoxTraceSingleByProfile(
 					GetWorld(),
 					NodeCenter,
@@ -104,7 +127,7 @@ void UPathfindingGridComponent::BakeGrid()
 					0);
 				Node.bWalkable = !HitResult.bBlockingHit;
 				
-				Nodes.Add(Node);
+				GridArray->Set(X, Y, Z, Node);
 			}
 		}
 	}
@@ -116,7 +139,7 @@ void UPathfindingGridComponent::ResetGrid()
 {
 	Bounds = FBox(GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + FVector::OneVector * 1000);
 	GridNodeSize = 100;
-	Nodes.Empty();
+	GridArray->Empty();
 	Modify();
 }
 

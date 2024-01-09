@@ -14,10 +14,18 @@ class PATHFINDING_API UGridArray : public UObject
 {
 	GENERATED_BODY()
 
-	void Initialize(int XSize, int YSize, int ZSize);
+public:
+	void Initialize(int GridXSize, int GridYSize, int GridZSize);
+	void Empty();
 	void Set(int X, int Y, int Z, const FNodeGrid& Node);
-	FNodeGrid& Get(int X, int Y, int Z);
+	const FNodeGrid* Get(int X, int Y, int Z) const;
 	bool Contains(int X, int Y, int Z) const;
+	int GetXSize() const;
+	int GetYSize() const;
+	int GetZSize() const;
+
+	TArray<FNodeGrid>::RangedForIteratorType begin();
+	TArray<FNodeGrid>::RangedForIteratorType end();
 
 private:
 	UPROPERTY()

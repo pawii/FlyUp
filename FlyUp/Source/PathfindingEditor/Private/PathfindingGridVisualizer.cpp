@@ -17,30 +17,48 @@ void FPathfindingGridVisualizer::DrawVisualization(const UActorComponent* Compon
 {
 	if (const UPathfindingGridComponent* TargetingComponent = Cast<UPathfindingGridComponent>(Component))
 	{
+		FBox Bounds = TargetingComponent->GetBounds();
+		
 		PDI->SetHitProxy(new HPathfindingGridProxy(Component, 0));
 		const FLinearColor& BoundsMinColor = (SelectedPointIndex == 0) ? FLinearColor::Green : FLinearColor::Red;
-		PDI->DrawPoint(TargetingComponent->GetBoundsMinWorldPosition(), BoundsMinColor, 10, SDPG_Foreground);
+		PDI->DrawPoint(Bounds.Min, BoundsMinColor, 10, SDPG_Foreground);
 		
 		PDI->SetHitProxy(new HPathfindingGridProxy(Component, 1));
 		const FLinearColor& BoundsMaxColor = (SelectedPointIndex == 1) ? FLinearColor::Green : FLinearColor::Red;
-		PDI->DrawPoint(TargetingComponent->GetBoundsMaxWorldPosition(), BoundsMaxColor, 10, SDPG_Foreground);
+		PDI->DrawPoint(Bounds.Max, BoundsMaxColor, 10, SDPG_Foreground);
 		
 		PDI->SetHitProxy(nullptr);
-		DrawWireBox(PDI, TargetingComponent->Bounds, FLinearColor::White, SDPG_Foreground);
-		
-		for (const FNodeGrid& Node: TargetingComponent->Nodes)
+		DrawWireBox(PDI, Bounds, FLinearColor::White, SDPG_Foreground);
+
+		if (!TargetingComponent->GridArray)
 		{
-			if (!Node.bWalkable)
+			return;
+		}
+		
+		// TODO: replace on foreach loop
+		for (int X = 0; X < TargetingComponent->GridArray->GetXSize(); X++)
+		{
+			for (int Y = 0; Y < TargetingComponent->GridArray->GetYSize(); Y++)
 			{
-				DrawNode(PDI, Node, FColor::Red);
+				for (int Z = 0; Z < TargetingComponent->GridArray->GetZSize(); Z++)
+				{
+					const FNodeGrid* Node = TargetingComponent->GridArray->Get(X, Y, Z);
+					if (!Node->bWalkable)
+					{
+						DrawNode(PDI, *Node, FColor::Red);
+					}
+				}
 			}
 		}
 
 		if (TargetingComponent->StartPoint)
 		{
-			FNodeGrid ClosestNode = TargetingComponent->FindClosestNode(TargetingComponent->StartPoint->GetActorLocation());
-			DrawNode(PDI, ClosestNode, FColor::Green);
-			DrawWireSphere(PDI, TargetingComponent->StartPoint->GetActorLocation(), FColor::Red, 10, 100, 0);
+			const FNodeGrid* StartNode = TargetingComponent->FindClosestNode(TargetingComponent->StartPoint->GetActorLocation());
+			if (StartNode)
+			{
+				DrawNode(PDI, *StartNode, FColor::Green);
+				DrawWireSphere(PDI, TargetingComponent->StartPoint->GetActorLocation(), FColor::Red, 10, 100, 0);
+			}
 		}
 	}
 }
@@ -61,7 +79,7 @@ bool FPathfindingGridVisualizer::VisProxyHandleClick(FEditorViewportClient* InVi
 	if (VisProxy && VisProxy->Component.IsValid())
 	{
 		bEditing = true;
-
+	
 		if (VisProxy->IsA(HPathfindingGridProxy::StaticGetType()))
 		{
 			const HPathfindingGridProxy* Proxy = static_cast<HPathfindingGridProxy*>(VisProxy);
@@ -86,11 +104,11 @@ bool FPathfindingGridVisualizer::GetWidgetLocation(const FEditorViewportClient* 
 	{
 		if (SelectedPointIndex == 0)
 		{
-			OutLocation = GetEditedGridComponent()->Bounds.Min;
+			OutLocation = GetEditedGridComponent()->GetBounds().Min;
 		}
 		else
 		{
-			OutLocation = GetEditedGridComponent()->Bounds.Max;
+			OutLocation = GetEditedGridComponent()->GetBounds().Max;
 		}
         
 		return true;
@@ -107,20 +125,23 @@ bool FPathfindingGridVisualizer::HandleInputDelta(FEditorViewportClient* Viewpor
 	UPathfindingGridComponent* GridComponent = GetEditedGridComponent();
 	if (GridComponent && SelectedPointIndex != INDEX_NONE)
 	{
+		FBox Bounds = GridComponent->GetBounds();
 		if (SelectedPointIndex == 0)
 		{
-			GridComponent->Bounds.Min = GridComponent->GetBoundsMinWorldPosition() + DeltaTranslate;
+			Bounds.Min += DeltaTranslate;
+			GridComponent->SetBounds(Bounds);
 		}
 		else
 		{
-			GridComponent->Bounds.Max = GridComponent->GetBoundsMaxWorldPosition() + DeltaTranslate;
+			Bounds.Max += DeltaTranslate;
+			GridComponent->SetBounds(Bounds);
 		}
-
+	
 		if (DeltaTranslate != FVector::ZeroVector)
 		{
 			GridComponent->Modify();
 		}
-
+	
 		bHandled = true;
 	}
 
