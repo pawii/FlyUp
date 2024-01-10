@@ -5,16 +5,7 @@ UPathfindingGridComponent::UPathfindingGridComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	if (!GridArray)
-	{
-		GridArray = NewObject<UGridArray>();
-		GridArray->Initialize(0, 0, 0);
-		UE_LOG(LogTemp, Warning, TEXT("Initialize GridArray"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("GridArray already exists"));
-	}
+	GridArray = CreateDefaultSubobject<UGridArray>(TEXT("MyGridArray"));
 }
 
 const FNodeGrid* UPathfindingGridComponent::FindClosestNode(FVector Location) const
@@ -95,6 +86,7 @@ void UPathfindingGridComponent::BakeGrid()
 	int XSize = ((BoundsMax.X - BoundsMin.X) / GridNodeSize) + 1;
 	int YSize = ((BoundsMax.Y - BoundsMin.Y) / GridNodeSize) + 1;
 	int ZSize = ((BoundsMax.Z - BoundsMin.Z) / GridNodeSize) + 1;
+
 	GridArray->Initialize(XSize, YSize, ZSize);
 
 	for (int X = 0; X < XSize; X++)
