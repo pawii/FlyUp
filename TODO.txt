@@ -7,3 +7,7 @@ https://mikelis.net/memory-management-garbage-collection-in-unreal-engine/
 read about when constructor of AActor get called
 https://forums.unrealengine.com/t/when-is-the-constructor-called/480067/4
 https://forums.unrealengine.com/t/when-is-the-constructor-called/480067/3
+
+libraries
+boostorg/json - c++ json https://forums.unrealengine.com/t/using-boost-in-ue4-project/389821
+g-truc/glm - c++ game dev mathematic
