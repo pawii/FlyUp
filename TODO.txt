@@ -7,10 +7,3 @@ https://mikelis.net/memory-management-garbage-collection-in-unreal-engine/
 read about when constructor of AActor get called
 https://forums.unrealengine.com/t/when-is-the-constructor-called/480067/4
 https://forums.unrealengine.com/t/when-is-the-constructor-called/480067/3
-
-
-https://georgy.dev/posts/third-party-integration/
-https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/BuildTools/UnrealBuildTool/ThirdPartyLibraries/
-
-
-build boost - just google it:

@@ -75,14 +75,9 @@ void UPathfindingGridComponent::SetBounds(FBox NewBounds)
 	this->Bounds.Max = NewBounds.Max - GetOwner()->GetActorLocation();
 }
 
-#include <glm/glm.hpp>
-
 void UPathfindingGridComponent::BakeGrid()
 {
-	glm::vec4 v(6.0f);
-
-	UE_LOG(LogTemp, Warning, TEXT("Bake Pressed %f"), v.a);
-	return;
+	UE_LOG(LogTemp, Warning, TEXT("Bake Pressed"));
 
 	FVector NodeHalfSize = FVector::OneVector * GridNodeSize * 0.5f;
 	FVector BoundsMin = GetBounds().Min;
